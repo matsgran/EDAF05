@@ -5,7 +5,7 @@ import java.io.*;
 
 
 public class TestGS {
-	private final static String TESTDATA_DIR = "/home/mats/Documents/EDAF05/StableMatching/bin";
+	private final static String TESTDATA_DIR = "/home/mats/Documents/git/EDAF05/StableMatching/bin";
 	private final static char SC = File.separatorChar;
 	
 	/**
@@ -78,7 +78,7 @@ public class TestGS {
 		runTestCase("sm-random-5");
 		runTestCase("sm-random-50");
 		runTestCase("sm-random-500");
-		runTestCase("sm-random-5000");
+		//runTestCase("sm-random-5000");
 		runTestCase("sm-worst-5");
 		runTestCase("sm-worst-50");
 		runTestCase("sm-worst-500");

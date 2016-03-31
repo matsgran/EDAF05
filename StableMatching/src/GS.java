@@ -50,8 +50,8 @@ public class GS {
 				String num = in.next();
 				pos = (Integer.parseInt(num.substring(0, num.length()-1)) - 2) / 2;
 				for (int j = 0; j < n; ++j) {
-					womanPref[pos][j] = ((in.nextInt() + 1) / 2) - 1;
-					//womanPref[pos][((in.nextInt() + 1) / 2) - 1] = j;
+					//womanPref[pos][j] = ((in.nextInt() + 1) / 2) - 1;
+					womanPref[pos][((in.nextInt() + 1) / 2) - 1] = j;
 				}
 			}
 		}
@@ -88,12 +88,12 @@ public class GS {
 			} else {
 				int mp = current[w];
 				int mPos = 0, mpPos = 0;				
-				//mPos = womanPref[w][m];
-				//mpPos = womanPref[w][mp];
-				for (int i = 0; i < n; ++i) {
+				mPos = womanPref[w][m];
+				mpPos = womanPref[w][mp];
+				/*for (int i = 0; i < n; ++i) {
 					if (womanPref[w][i] == m) mPos = i;
 					if (womanPref[w][i] == mp) mpPos = i;
-				}
+				}*/
 				if (mpPos < mPos) {
 					freeMen.addFirst(m);
 				} else {
