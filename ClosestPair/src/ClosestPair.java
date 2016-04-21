@@ -96,7 +96,7 @@ public class ClosestPair {
 		return new PointPair(P[p1], P[p2]);
 	}
 	
-	public Point[] readDataFromFile(Scanner in) {
+	public Point[] readDataFromTSPFile(Scanner in) {
 		int n = -1;
 		String line = null;
 		String[] parts = null;
@@ -119,15 +119,34 @@ public class ClosestPair {
 			line = in.nextLine().trim();
 			parts = line.split("\\s+");
 			if (parts.length != 3) break;
-			P[index++] = new Point(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]));
+			P[index] = new Point(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), index);
+			index++;
 		}
 		
 		return P;
 	}
 	
+	public Point[] readDataFromWC(Scanner in, String filename) {
+		String[] parts = filename.split("-");
+		int n = Integer.parseInt(parts[2].substring(0, parts[2].length() - 4));
+		
+		Point[] P = new Point[n];
+		
+		int index = 0;
+		String line = null;
+		while (in.hasNextLine()) {
+			line = in.nextLine().trim();
+			parts = line.split("\\s+");
+			if (parts.length != 3) break;
+			P[index] = new Point(Double.parseDouble(parts[1]), Double.parseDouble(parts[2]), index);
+			index++;
+		}
+		
+		return P;
+	}
 
 
-	public static double roundToSignificantFigures(double num, int n) {
+	public double roundToSignificantFigures(double num, int n) {
 	    if (num == 0) {
 	        return 0;
 	    }
@@ -150,7 +169,7 @@ public class ClosestPair {
 	    }
 	}
 	
-	public ClosestPair(String filename) {
+	public ClosestPair(String filename, String type) {
 		Scanner in = null;
 		try {
 			in = new Scanner(new File(TESTDATA_DIR + SC + filename));
@@ -158,37 +177,68 @@ public class ClosestPair {
 			e.printStackTrace();
 		}
 		
-		Point[] P = readDataFromFile(in);
+		Point[] P = null;
 		
-		System.out.println(fmt(Point.distance(closestPair(P))));
+		switch (type) {
+		case "tsp":
+			P = readDataFromTSPFile(in);
+			System.out.println(fmt(Point.distance(closestPair(P))));
+			break;
+		case "wc":
+			P = readDataFromWC(in, filename);
+			System.out.print(filename + ": ");
+			PointPair p = closestPair(P);
+			System.out.print(P.length + " ");
+			System.out.println(p.first.getIndex() + " " + p.second.getIndex() + " " + fmt(Point.distance(p)));
+			break;
+		}
 	}
 	
 	public static void main(String[] args) {
-		File dir = new File(TESTDATA_DIR);
+		boolean tsp = false;
+		boolean stdOut = true;
+		
+		if (tsp) {
+			File dir = new File(TESTDATA_DIR);
 
-		ArrayList<String> files = new ArrayList<String>();
-		for (File f : dir.listFiles()) {
-			if (f.isFile() && f.toString().endsWith("-tsp.txt")) {
-				String s = f.toString();
-				s = s.substring(s.lastIndexOf(SC) + 1);
-				files.add(s);
+			ArrayList<String> files = new ArrayList<String>();
+			for (File f : dir.listFiles()) {
+				if (f.isFile() && f.toString().endsWith("-tsp.txt")) {
+					String s = f.toString();
+					s = s.substring(s.lastIndexOf(SC) + 1);
+					files.add(s);
+				}
 			}
-		}
-		
-		Collections.sort(files);
-		
-		/*PrintStream out = null;
-		try {
-			out = new PrintStream(new FileOutputStream("output.txt"));
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		System.setOut(out);*/
-		
-		for (String filename : files) {
-			System.out.print("../data/" + filename.substring(0, filename.length()-8) + ".tsp: ");
-			//System.out.print(filename + ": ");
-			new ClosestPair(filename);
+			
+			Collections.sort(files);
+			
+			if (!stdOut) {
+				PrintStream out = null;
+				try {
+					out = new PrintStream(new FileOutputStream("output.txt"));
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+				System.setOut(out);
+			}
+			
+			for (String filename : files) {
+				System.out.print("../data/" + filename.substring(0, filename.length()-8) + ".tsp: ");
+				//System.out.print(filename + ": ");
+				new ClosestPair(filename, "tsp");
+			}
+		} else {
+			new ClosestPair("wc-instance-2.txt", "wc");
+			new ClosestPair("wc-instance-6.txt", "wc");
+			new ClosestPair("wc-instance-14.txt", "wc");
+			new ClosestPair("wc-instance-30.txt", "wc");
+			new ClosestPair("wc-instance-62.txt", "wc");
+			new ClosestPair("wc-instance-126.txt", "wc");
+			new ClosestPair("wc-instance-254.txt", "wc");
+			new ClosestPair("wc-instance-1022.txt", "wc");
+			new ClosestPair("wc-instance-4094.txt", "wc");
+			new ClosestPair("wc-instance-16382.txt", "wc");
+			new ClosestPair("wc-instance-65534.txt", "wc");
 		}
 	}
 

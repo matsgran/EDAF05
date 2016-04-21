@@ -2,10 +2,12 @@
 public class Point {
 	
 	private double x, y;
+	private int index;
 	
-	public Point(double x, double y) {
+	public Point(double x, double y, int i) {
 		this.x = x;
 		this.y = y;
+		index = i;
 	}
 	
 	public double getX() {
@@ -14,6 +16,10 @@ public class Point {
 	
 	public double getY() {
 		return y;
+	}
+	
+	public int getIndex() {
+		return index;
 	}
 	
 	public String toString() {
